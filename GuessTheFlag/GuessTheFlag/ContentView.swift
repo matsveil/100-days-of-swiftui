@@ -5,11 +5,59 @@
 //  Created by Matsvei Liapich on 3/9/23.
 //
 
-// 1. Add an @State property to store the user’s score, modify it when they get an answer right or wrong, then display it in the alert and in the score label.
-// 2. When someone chooses the wrong flag, tell them their mistake in your alert message – something like “Wrong! That’s the flag of France,” for example.
-// 3. Make the game show only 8 questions, at which point they see a final alert judging their score and can restart the game.
-
 import SwiftUI
+
+struct FlagImage: View {
+    var flagName: String
+    var body: some View {
+        Image(flagName)
+            .renderingMode(.original)
+            .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+            .shadow(color: Color("Gunmetal"), radius: 25)
+    }
+}
+
+struct LargeTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(.largeTitle, design: .rounded, weight: .bold))
+            .foregroundColor(Color("Powder Blue"))
+    }
+}
+
+struct Title: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.white)
+            .font(.system(.title, design: .rounded, weight: .bold))
+    }
+}
+
+struct Subtitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(Color("French Grey"))
+            .font(.headline.weight(.bold))
+    }
+}
+
+extension View {
+    func largeTitleStyle() -> some View {
+        modifier(LargeTitle())
+    }
+}
+
+extension View {
+    func titleStyle() -> some View {
+        modifier(Title())
+    }
+}
+
+extension View {
+    func subtitleStyle() -> some View {
+        modifier(Subtitle())
+    }
+}
 
 struct ContentView: View {
     @State private var gameOver = false
@@ -27,29 +75,27 @@ struct ContentView: View {
                 .ignoresSafeArea()
             VStack {
                 Spacer()
+                Spacer()
                 
                 Text("Guess The Flag")
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                    .foregroundColor(Color("Powder Blue"))
+                    .largeTitleStyle()
+                
+                Spacer()
                 
                 VStack(spacing: 15) {
                     VStack {
                         Text("Tap the Flag Of")
-                            .foregroundColor(Color("French Grey"))
-                            .font(.headline.weight(.bold))
+                            .subtitleStyle()
                         Text(countries[correctAnswer])
-                            .foregroundColor(.white)
-                            .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                            .titleStyle()
                     }
                     
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                                .shadow(radius: 25)
+                            FlagImage(flagName: countries[number])
+
                         }
                     }
                 }
@@ -59,13 +105,11 @@ struct ContentView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 
                 Spacer()
-                Spacer()
                 
-                Text("Score: \(score) / \(question)")
-                    .foregroundColor(Color("Powder Blue"))
-                    .font(.system(.title, design: .rounded, weight: .bold))
+                Text("Score: \(score) of \(question)")
+                    .largeTitleStyle()
                 
-                Spacer()
+
                 Spacer()
                 Spacer()
             }
@@ -93,8 +137,10 @@ struct ContentView: View {
                 gameOver = true
             }
         } else {
+            score += 1
             scoreTitle = "Game Over"
-            scoreMessage = "Your final score is \(score)."
+            scoreMessage = "Your final score is \(score) or "
+            buttonMessage = "Play Again"
             score = 0
             question = 0
             gameOver = true
