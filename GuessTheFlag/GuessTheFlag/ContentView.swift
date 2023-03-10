@@ -63,7 +63,7 @@ struct ContentView: View {
                 
                 Text("Score: \(score) / \(question)")
                     .foregroundColor(Color("Powder Blue"))
-                    .font(.title.bold())
+                    .font(.system(.title, design: .rounded, weight: .bold))
                 
                 Spacer()
                 Spacer()
