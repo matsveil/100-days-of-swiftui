@@ -139,11 +139,11 @@ struct ContentView: View {
         } else {
             score += 1
             scoreTitle = "Game Over"
-            scoreMessage = "Your final score is \(score) or "
+            scoreMessage = "Your final score was \(score)."
             buttonMessage = "Play Again"
+            gameOver = true
             score = 0
             question = 0
-            gameOver = true
         }
     }
 
