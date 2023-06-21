@@ -27,40 +27,47 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                VStack(alignment: .leading) {
-                    Text("Your Ideal Bed Time")
-                        .font(.headline)
-                    Text(calculateBedtime())
-                        .font(.largeTitle)
-                        .bold()
-                        .fontDesign(.rounded)
-                        .foregroundColor(.indigo)
+                Section {
+                    VStack(alignment: .leading) {
+                        Text("Your ideal bed time is...")
+                            .font(.headline)
+                            .fontDesign(.rounded)
+                        Text(calculateBedtime())
+                            .font(.largeTitle)
+                            .bold()
+                            .fontDesign(.rounded)
+                            .foregroundColor(.indigo)
+                    }
                 }
+                
                 VStack(alignment: .leading) {
-                    Text("Wake Up Time")
+                    Text("Desired wake up time")
                         .font(.headline)
+                        .fontDesign(.rounded)
                     
                     DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Desired Amount of Sleep")
+                    Text("Desired amount of sleep")
                         .font(.headline)
+                        .fontDesign(.rounded)
                     
                     Stepper("\(sleepAmount.formatted()) Hours", value: $sleepAmount, in: 4...12, step: 0.25)
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Coffee You Had in Cups")
+                VStack(alignment: .leading) {
+                    Text("Coffee intake in cups")
                         .font(.headline)
+                        .fontDesign(.rounded)
                     
                     Picker("", selection: $coffeeAmount) {
-                        ForEach(1...10, id: \.self) { coffeeAmount in
+                        ForEach(1...5, id: \.self) { coffeeAmount in
                             Text("\(coffeeAmount)")
                         }
                     }
-                    .pickerStyle(.wheel)
+                    .pickerStyle(.segmented)
                 }
                 
             }

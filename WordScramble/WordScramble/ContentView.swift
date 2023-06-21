@@ -62,7 +62,15 @@ struct ContentView: View {
         !usedWords.contains(word)
     }
     
-    func isPossible
+    func isPossible(word: String) -> Bool {
+        var tempWord = rootWord
+        
+        for letter in word {
+            if let pos = tempWord.firstIndex(of: letter) {
+                
+            }
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
