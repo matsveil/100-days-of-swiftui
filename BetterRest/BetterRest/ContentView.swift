@@ -36,7 +36,7 @@ struct ContentView: View {
                             .font(.largeTitle)
                             .bold()
                             .fontDesign(.rounded)
-                            .foregroundColor(.indigo)
+                            .foregroundColor(.cyan)
                     }
                 }
                 
@@ -54,7 +54,7 @@ struct ContentView: View {
                         .font(.headline)
                         .fontDesign(.rounded)
                     
-                    Stepper("\(sleepAmount.formatted()) Hours", value: $sleepAmount, in: 4...12, step: 0.25)
+                    Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4...12, step: 0.25)
                 }
                 
                 VStack(alignment: .leading) {
