@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var usedWords = [String]()
     @State private var rootWord = ""
     @State private var newWord = ""
+    @State private var score = 0
     
     @State private var errorTitle = ""
     @State private var errorMessage = ""
@@ -18,30 +19,54 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                Section {
-                    TextField("Enter your word...", text: $newWord)
-                        .autocapitalization(.none)
-                }
-                
-                Section {
-                    ForEach(usedWords, id: \.self) { word in
-                        HStack {
-                            Image(systemName: "\(word.count).circle.fill")
-                            Text(word)
+            ZStack {
+                List {
+                    Section {
+                        TextField("Enter your word...", text: $newWord)
+                            .autocapitalization(.none)
+                    }
+                    
+                    Section {
+                        ForEach(usedWords, id: \.self) { word in
+                            HStack {
+                                Image(systemName: "\(word.count).circle.fill")
+                                Text(word)
+                            }
                         }
                     }
                 }
+                .navigationTitle(rootWord)
+                .onSubmit {
+                    addNewWord()
+                }
+                .onAppear(perform: startGame)
+                .alert(errorTitle, isPresented: $showingError) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text(errorMessage)
+                }
+                
+                VStack {
+                    Spacer()
+                    Button(action: {}) {
+                        Text("Score: \(score)")
+                            .font(.headline)
+                            .bold()
+                        }
+                        .padding()
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(.infinity)
+
+                }
             }
-            .navigationTitle(rootWord)
-            .onSubmit {
-                addNewWord()
-            }
-            .onAppear(perform: startGame)
-            .alert(errorTitle, isPresented: $showingError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(errorMessage)
+            .toolbar {
+                ToolbarItem {
+                    Button("Reset") {
+                        startGame()
+                        score = 0
+                    }
+                }
             }
         }
     }
@@ -49,6 +74,16 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
+        
+        guard isNotRoot(word: answer) else {
+            wordError(title: "Word is same as root word", message: "Find words inside of '\(rootWord)'!")
+            return
+        }
+        
+        guard isTooShort(word: answer) else {
+            wordError(title: "Word too short", message: "Find a word with at least three letters.")
+            return
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original")
@@ -64,6 +99,8 @@ struct ContentView: View {
             wordError(title: "Word not recognized", message: "You can't just make them up, you know!")
             return
         }
+        
+        userScore(word: answer)
         
         withAnimation {
             usedWords.insert(answer, at: 0)
@@ -89,6 +126,14 @@ struct ContentView: View {
 
         // If were are *here* then there was a problem – trigger a crash and report the error
         fatalError("Could not load start.txt from bundle.")
+    }
+    
+    func isNotRoot(word: String) -> Bool {
+        word != rootWord
+    }
+    
+    func isTooShort(word: String) -> Bool {
+        word.count > 3
     }
     
     func isOriginal(word: String) -> Bool {
@@ -121,6 +166,10 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func userScore(word: String) {
+        score += word.count
     }
 }
 
