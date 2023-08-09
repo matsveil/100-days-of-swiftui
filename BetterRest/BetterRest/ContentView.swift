@@ -29,19 +29,19 @@ struct ContentView: View {
             Form {
                 Section {
                     VStack(alignment: .leading) {
-                        Text("Your ideal bed time is...")
+                        Text("Ideal Bed Time")
                             .font(.headline)
                             .fontDesign(.rounded)
                         Text(calculateBedtime())
                             .font(.largeTitle)
                             .bold()
                             .fontDesign(.rounded)
-                            .foregroundColor(.cyan)
+                            .foregroundColor(.blue)
                     }
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Desired wake up time")
+                    Text("Wake Up")
                         .font(.headline)
                         .fontDesign(.rounded)
                     
@@ -50,7 +50,7 @@ struct ContentView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Desired amount of sleep")
+                    Text("Sleep Amount")
                         .font(.headline)
                         .fontDesign(.rounded)
                     
@@ -58,7 +58,7 @@ struct ContentView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Coffee intake in cups")
+                    Text("Coffee Intake")
                         .font(.headline)
                         .fontDesign(.rounded)
                     
