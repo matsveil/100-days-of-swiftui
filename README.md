@@ -1,5 +1,5 @@
 # Progress
-<img src="https://progress-bar.dev/30" width="350">
+<img src="https://progress-bar.dev/34" width="350">
 
 # Projects
 | Name | Preview |
