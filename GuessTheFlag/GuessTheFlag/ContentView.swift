@@ -108,7 +108,6 @@ struct ContentView: View {
                         }) {
                             FlagImage(flagName: countries[number])
                                 .scaleEffect(selectedFlag == number ? 1.2 : 1.0)
-                                .animation(.easeInOut(duration: 0.3), value: selectedFlag == number)
                         }
                     }
                 }
