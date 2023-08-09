@@ -63,8 +63,9 @@ struct ContentView: View {
                         .fontDesign(.rounded)
                     
                     Picker("", selection: $coffeeAmount) {
-                        ForEach(1...5, id: \.self) { coffeeAmount in
-                            Text("\(coffeeAmount)")
+                        Text("1 cup").tag(1)
+                        ForEach(2...5, id: \.self) { coffeeAmount in
+                            Text("\(coffeeAmount) cups")
                         }
                     }
                     .pickerStyle(.segmented)
