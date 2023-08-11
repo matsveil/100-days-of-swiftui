@@ -10,6 +10,10 @@ import SwiftUI
 struct ContentView: View {
     let numberOfQuestions = [5, 10, 20]
     @State private var selectedNumberOfQuestios = 5
+    @State private var selectedLevel = "Easy"
+    @State private var answer = ""
+    @FocusState var isInputActive: Bool
+
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
@@ -20,29 +24,41 @@ struct ContentView: View {
                 .fontDesign(.rounded)
 
             HStack {
-                Button("Easy") {
-                    //
+                Button {
+                    selectedLevel = "Easy"
+                } label: {
+                    Text("Easy").bold()
                 }
-                .padding(20)
+                .padding()
                 .background(.green)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .foregroundStyle(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Easy" ? 1 : 0.25)
+                .animation(.default, value: selectedLevel)
                 
-                Button("Mid") {
-                    //
+                Button {
+                    selectedLevel = "Mid"
+                } label: {
+                    Text("Mid").bold()
                 }
-                .padding(20)
+                .padding()
                 .background(.orange)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .foregroundStyle(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Mid" ? 1 : 0.25)
+                .animation(.default, value: selectedLevel)
                 
-                Button("Hard") {
-                    //
+                Button {
+                    selectedLevel = "Hard"
+                } label: {
+                    Text("Hard").bold()
                 }
-                .padding(20)
+                .padding()
                 .background(.red)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .foregroundStyle(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Hard" ? 1 : 0.25)
+                .animation(.default, value: selectedLevel)
                 
             }
             
@@ -61,9 +77,54 @@ struct ContentView: View {
             Spacer()
             Spacer()
             Spacer()
+            
+            List {
+                ForEach(1...selectedNumberOfQuestios, id: \.self) { index in
+                    HStack {
+                        Text("\(index).    \(generateProblem(level: selectedLevel))")
+                        TextField("", text: $answer)
+                            .keyboardType(.numberPad)
+                            .focused($isInputActive)
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+
+                    Button("Done") {
+                        isInputActive = false
+                    }
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .listStyle(.inset)
+            .animation(.smooth, value: selectedNumberOfQuestios)
         }
         .padding(40)
 
+    }
+    
+    func generateProblem(level: String) -> String {
+        let easyNumber = Int.random(in: 1..<11)
+        let easyNumber2 = Int.random(in: 1..<11)
+        
+        let midNumber = Int.random(in: 1..<101)
+        let midNumber2 = Int.random(in: 1..<101)
+        
+        let hardNumber = Int.random(in: 1..<1001)
+        let hardNumber2 = Int.random(in: 1..<1001)
+        
+        switch level {
+        case "Easy":
+            return "\(easyNumber) x \(easyNumber2) = "
+        case "Mid":
+            return "\(midNumber) x \(midNumber2) = "
+        case "Hard":
+            return "\(hardNumber) x \(hardNumber2) = "
+        default:
+            return "\(easyNumber) x \(easyNumber2) = "
+        }
     }
 }
 
