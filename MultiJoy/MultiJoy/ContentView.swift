@@ -9,63 +9,57 @@ import SwiftUI
 
 struct ContentView: View {
     let numberOfQuestions = [5, 10, 20]
+    @State private var num1 = Int.random(in: 1..<11)
+    @State private var num2 = Int.random(in: 1..<11)
+    
     @State private var selectedNumberOfQuestios = 5
-    @State private var selectedLevel = "Easy"
+    @State private var selectedLevel = "easy"
     @State private var answer = ""
-    @FocusState var isInputActive: Bool
+    @State private var questionNumber = 1
+    @State private var isCorrect = false
+    @FocusState var isActive: Bool
 
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
             
             Text("Difficulty Level")
-                .font(.title)
+                .font(.title2)
                 .bold()
-                .fontDesign(.rounded)
 
             HStack {
                 Button {
-                    selectedLevel = "Easy"
+                    selectedLevel = "easy"
                 } label: {
-                    Text("Easy").bold()
+                    Text("easy").bold()
                 }
-                .padding()
-                .background(.green)
-                .foregroundStyle(.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .opacity(selectedLevel == "Easy" ? 1 : 0.25)
+                .buttonStyle(.borderedProminent)
+                .opacity(selectedLevel == "easy" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
                 
                 Button {
-                    selectedLevel = "Mid"
+                    selectedLevel = "mid"
                 } label: {
-                    Text("Mid").bold()
+                    Text("mid").bold()
                 }
-                .padding()
-                .background(.orange)
-                .foregroundStyle(.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .opacity(selectedLevel == "Mid" ? 1 : 0.25)
+                .buttonStyle(.borderedProminent)
+                .opacity(selectedLevel == "mid" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
                 
                 Button {
-                    selectedLevel = "Hard"
+                    selectedLevel = "hard"
                 } label: {
-                    Text("Hard").bold()
+                    Text("hard").bold()
                 }
-                .padding()
-                .background(.red)
-                .foregroundStyle(.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .opacity(selectedLevel == "Hard" ? 1 : 0.25)
+                .buttonStyle(.borderedProminent)
+                .opacity(selectedLevel == "hard" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
-                
             }
             
             Text("How many questions?")
-                .font(.title)
+                .font(.title2)
                 .bold()
-                .fontDesign(.rounded)
+                .padding(.top)
             
             Picker("Selected number of questions", selection: $selectedNumberOfQuestios) {
                 ForEach(numberOfQuestions, id: \.self) { number in
@@ -75,56 +69,51 @@ struct ContentView: View {
             .pickerStyle(.segmented)
             
             Spacer()
-            Spacer()
-            Spacer()
             
-            List {
-                ForEach(1...selectedNumberOfQuestios, id: \.self) { index in
-                    HStack {
-                        Text("\(index).    \(generateProblem(level: selectedLevel))")
-                        TextField("", text: $answer)
-                            .keyboardType(.numberPad)
-                            .focused($isInputActive)
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
+            HStack {
+                Image(systemName: "\(questionNumber).circle.fill")
+                Text("\(num1) x \(num2) =")
+                TextField("?", text: $answer)
+                    .fontDesign(.rounded)
+                    .keyboardType(.numberPad)
+                    .focused($isActive)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
 
-                    Button("Done") {
-                        isInputActive = false
-                    }
-                }
+                                Button("Done") {
+                                    if Int(answer) == (num1 * num2) {
+                                        isActive = false
+                                        questionNumber += 1
+                                        answer = ""
+                                        num1 = Int.random(in: 1..<11)
+                                        num2 = Int.random(in: 1..<11)
+                                        
+                                    } else {
+                                        //
+                                    }
+                                }
+                                .font(.headline)
+                            }
+                        }
+                Text(Int(answer) == (num1 * num2) ? Image(systemName: "checkmark.square") : Image(systemName: "square"))
             }
-            .scrollContentBackground(.hidden)
-            .listStyle(.inset)
-            .animation(.smooth, value: selectedNumberOfQuestios)
-        }
-        .padding(40)
+            .padding()
+            .font(.title)
+            .bold()
+            .background(Int(answer) == (num1 * num2) ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .animation(.default, value: answer)
 
-    }
-    
-    func generateProblem(level: String) -> String {
-        let easyNumber = Int.random(in: 1..<11)
-        let easyNumber2 = Int.random(in: 1..<11)
-        
-        let midNumber = Int.random(in: 1..<101)
-        let midNumber2 = Int.random(in: 1..<101)
-        
-        let hardNumber = Int.random(in: 1..<1001)
-        let hardNumber2 = Int.random(in: 1..<1001)
-        
-        switch level {
-        case "Easy":
-            return "\(easyNumber) x \(easyNumber2) = "
-        case "Mid":
-            return "\(midNumber) x \(midNumber2) = "
-        case "Hard":
-            return "\(hardNumber) x \(hardNumber2) = "
-        default:
-            return "\(easyNumber) x \(easyNumber2) = "
+            Spacer()
+            Spacer()
+            Spacer()
+
+
+            
         }
+        .padding(30)
     }
 }
 
