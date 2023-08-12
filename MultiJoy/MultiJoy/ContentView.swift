@@ -13,10 +13,10 @@ struct ContentView: View {
     @State private var num2 = Int.random(in: 1..<11)
     
     @State private var selectedNumberOfQuestios = 5
-    @State private var selectedLevel = "easy"
+    @State private var selectedLevel = "Easy"
     @State private var answer = ""
     @State private var questionNumber = 1
-    @State private var isCorrect = false
+    
     @FocusState var isActive: Bool
 
     var body: some View {
@@ -29,30 +29,45 @@ struct ContentView: View {
 
             HStack {
                 Button {
-                    selectedLevel = "easy"
+                    selectedLevel = "Easy"
+                    num1 = Int.random(in: 1..<11)
+                    num2 = Int.random(in: 1..<11)
                 } label: {
-                    Text("easy").bold()
+                    Text("Easy").bold()
                 }
-                .buttonStyle(.borderedProminent)
-                .opacity(selectedLevel == "easy" ? 1 : 0.5)
+                .padding()
+                .background(.regularMaterial)
+                .foregroundColor(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Easy" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
                 
                 Button {
-                    selectedLevel = "mid"
+                    selectedLevel = "Mid"
+                    num1 = Int.random(in: 1..<51)
+                    num2 = Int.random(in: 1..<51)
                 } label: {
-                    Text("mid").bold()
+                    Text("Mid").bold()
                 }
-                .buttonStyle(.borderedProminent)
-                .opacity(selectedLevel == "mid" ? 1 : 0.5)
+                .padding()
+                .background(.regularMaterial)
+                .foregroundColor(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Mid" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
                 
                 Button {
-                    selectedLevel = "hard"
+                    selectedLevel = "Hard"
+                    num1 = Int.random(in: 1..<101)
+                    num2 = Int.random(in: 1..<101)
                 } label: {
-                    Text("hard").bold()
+                    Text("Hard").bold()
                 }
-                .buttonStyle(.borderedProminent)
-                .opacity(selectedLevel == "hard" ? 1 : 0.5)
+                .padding()
+                .background(.regularMaterial)
+                .foregroundColor(.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .opacity(selectedLevel == "Hard" ? 1 : 0.5)
                 .animation(.default, value: selectedLevel)
             }
             
@@ -77,29 +92,34 @@ struct ContentView: View {
                     .fontDesign(.rounded)
                     .keyboardType(.numberPad)
                     .focused($isActive)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-
-                                Button("Done") {
-                                    if Int(answer) == (num1 * num2) {
-                                        isActive = false
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            
+                            Button("Done") {
+                                if Int(answer) == (num1 * num2) {
+                                    isActive = false
+                                    if questionNumber < selectedNumberOfQuestios {
                                         questionNumber += 1
-                                        answer = ""
-                                        num1 = Int.random(in: 1..<11)
-                                        num2 = Int.random(in: 1..<11)
-                                        
                                     } else {
-                                        //
+                                        questionNumber = 0
                                     }
+                                    answer = ""
+                                    num1 = Int.random(in: 1..<11)
+                                    num2 = Int.random(in: 1..<11)
+                                    
+                                } else {
+                                    //
                                 }
-                                .font(.headline)
                             }
+                            .font(.headline)
                         }
+                    }
                 Text(Int(answer) == (num1 * num2) ? Image(systemName: "checkmark.square") : Image(systemName: "square"))
             }
+            .fixedSize(horizontal: false, vertical: true)
             .padding()
-            .font(.title)
+            .font(.title2)
             .bold()
             .background(Int(answer) == (num1 * num2) ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
             .background(.regularMaterial)
