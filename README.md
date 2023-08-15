@@ -1,6 +1,6 @@
 # Progress
-<img src="https://progress-bar.dev/35" width="350">
-
+<img src="https://progress-bar.dev/36" width="350">
+<!---
 # Projects
 | Name | Preview |
 | ---- | --------|
@@ -9,3 +9,4 @@
 | 3. Improve projects 1 & 2 | |
 | 4. [BetterRest - Calculate your wake up time based on coffee intake](https://github.com/matsveil/100-days-of-swiftui/tree/main/BetterRest) | <img src="https://github.com/matsveil/100-days-of-swiftui/assets/109008007/136f05e7-21a2-429e-b312-a14e88172bdc" width="200"> |
 | 5. [WordScrample - Find words inside a word](https://github.com/matsveil/100-days-of-swiftui/tree/main/WordScramble) | |
+-->
