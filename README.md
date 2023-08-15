@@ -1,3 +1,6 @@
+# 100 Days of SwiftUI
+Follow my journey of learning SwiftUI with [100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui) by [Paul Hudson](https://github.com/twostraws).
+
 # Progress
 <img src="https://progress-bar.dev/36" width="350">
 <!---
