@@ -2,7 +2,7 @@
 Follow my journey of learning SwiftUI with [100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui) by [Paul Hudson](https://github.com/twostraws).
 
 ### Progress
-![](https://geps.dev/progress/37?dangerColor=800000&warningColor=ff9900&successColor=006600)
+![](https://geps.dev/progress/38?dangerColor=800000&warningColor=ff9900&successColor=006600)
 
 ### Projects
 | Name | Preview |
