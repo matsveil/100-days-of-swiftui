@@ -11,9 +11,14 @@ struct ContentView: View {
     let questionCount = [5, 10, 20]
     @State private var selectedQuestionCount: Int = 5
     @State private var selectedMultiplicationTables = Set<Int>()
+    @State private var path: [Route] = []
+    
+    enum Route: Hashable {
+        case game(GameSettings)
+    }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Form {
                 Section("Select tables") {
                     ForEach(1..<11, id: \.self) { number in
@@ -39,22 +44,41 @@ struct ContentView: View {
                         }
                     }
                 }
-
-                Picker("Number of questions", selection: $selectedQuestionCount) {
-                    ForEach(questionCount, id: \.self) { number in
-                        Text(number.description).tag(number)
+                
+                Section {
+                    
+                    Picker("Number of questions", selection: $selectedQuestionCount) {
+                        ForEach(questionCount, id: \.self) { number in
+                            Text(number.description).tag(number)
+                        }
                     }
                 }
                 
-                Button {
+                Section {
                     
-                } label: {
-                    Spacer()
-                    Text("Start")
-                    Spacer()
+                    Button {
+                        let settings = GameSettings(
+                            questionsCount: selectedQuestionCount,
+                            multiplicationTables: selectedMultiplicationTables
+                        )
+                        
+                        path.append(.game(settings))
+                    } label: {
+                        Spacer()
+                        Text("Start")
+                        Spacer()
+                    }
+                    .buttonStyle(.glassProminent)
+                    .disabled(selectedMultiplicationTables.isEmpty)
                 }
-                .buttonStyle(.glassProminent)
-                .disabled(selectedMultiplicationTables.isEmpty)
+            }
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .game(let settings):
+                    GameView(settings: settings) {
+                        path    .removeAll()
+                    }
+                }
             }
             .navigationTitle("Edutainment")
         }
