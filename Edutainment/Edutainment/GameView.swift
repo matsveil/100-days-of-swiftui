@@ -7,26 +7,17 @@
 
 import SwiftUI
 
-struct GameSettings: Hashable {
-    let questionsCount: Int
-    let multiplicationTables: Set<Int>
-}
-
 struct GameView: View {
-    let settings: GameSettings
+    let questions: [Question]
     let quit: () -> Void
     
     @State private var score: Int = 0
     @State private var currentQuestion: Int = 0
-    @State private var multiplicand: Int = 0
-    @State private var multiplier: Int = 0
-    @State private var correctAnswer: Int = 0
     @State private var answer: String = ""
-    @State private var returnHome: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("What is \(multiplicand) times \(multiplier)?")
+            Text("What is \(questions[currentQuestion].multiplicand) times \(questions[currentQuestion].multiplier)?")
                 .font(.title).bold()
                 .foregroundStyle(.primary)
             
@@ -44,40 +35,25 @@ struct GameView: View {
                 }
                 .buttonStyle(.glassProminent)
                 .font(.headline)
+                .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-
+            
             
         }
         .padding(25)
-        .onAppear {
-            self.generateQuestion()
-        }
     }
     
     private func nextQuestion() {
-        currentQuestion += 1
         answer = ""
         
-        guard currentQuestion <= settings.questionsCount else {
+        if currentQuestion < questions.count - 1 {
+            currentQuestion += 1
+        } else {
             quit()
-            return
         }
-        
-        generateQuestion()
-    }
-    
-    private func generateQuestion() {
-        guard let multiplicationTable = settings.multiplicationTables.randomElement() else {
-            return
-        }
-        
-        multiplicand = multiplicationTable
-        let multiplierRange = 1...10
-        multiplier = Int.random(in: multiplierRange)
-        correctAnswer = multiplicand * multiplier
     }
 }
 
 #Preview {
-    GameView(settings: GameSettings(questionsCount: 10, multiplicationTables: [2, 3, 5]), quit: {})
+    GameView(questions: [Question(multiplicand: 5, multiplier: 5, correctAnswer: 25)], quit: {})
 }

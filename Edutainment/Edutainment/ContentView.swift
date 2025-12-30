@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var path: [Route] = []
     
     enum Route: Hashable {
-        case game(GameSettings)
+        case game([Question])
     }
     
     var body: some View {
@@ -57,12 +57,9 @@ struct ContentView: View {
                 Section {
                     
                     Button {
-                        let settings = GameSettings(
-                            questionsCount: selectedQuestionCount,
-                            multiplicationTables: selectedMultiplicationTables
-                        )
+                        let questions = generateQuestions()
                         
-                        path.append(.game(settings))
+                        path.append(.game(questions))
                     } label: {
                         Spacer()
                         Text("Start")
@@ -74,14 +71,37 @@ struct ContentView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .game(let settings):
-                    GameView(settings: settings) {
-                        path    .removeAll()
+                case .game(let questions):
+                    GameView(questions: questions) {
+                        path.removeAll()
                     }
                 }
             }
             .navigationTitle("Edutainment")
         }
+    }
+    
+    private func generateQuestions() -> [Question] {
+        var questions: [Question] = []
+        
+        for _ in 0..<selectedQuestionCount {
+            let multiplicand = selectedMultiplicationTables.randomElement() ?? 0
+            
+            let multiplierRange = 1...10
+            let multiplier = Int.random(in: multiplierRange)
+            let correctAnswer = multiplicand * multiplier
+            
+            let question = Question(
+                multiplicand: multiplicand,
+                multiplier: multiplier,
+                correctAnswer: correctAnswer
+                
+            )
+            
+            questions.append(question)
+        }
+        
+        return questions
     }
 }
 
