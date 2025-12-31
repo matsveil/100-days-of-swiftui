@@ -43,7 +43,7 @@ struct GameView: View {
             
             
         }
-        .padding(25)
+        .padding()
         .alert("Correct answer", isPresented: $correctAnswer) {
             Button("Continue", action: nextQuestion)
         } message: {

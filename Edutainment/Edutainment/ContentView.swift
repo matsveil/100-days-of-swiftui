@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             Form {
-                Section("Select tables") {
+                Section("Select tables you want to practice") {
                     ForEach(1..<11, id: \.self) { number in
                         Button {
                             if selectedMultiplicationTables.contains(number) {
@@ -53,21 +53,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                
-                Section {
-                    
-                    Button {
-                        let questions = generateQuestions()
-                        
-                        path.append(.game(questions))
-                    } label: {
-                        Spacer()
-                        Text("Start")
-                        Spacer()
-                    }
-                    .buttonStyle(.glassProminent)
-                    .disabled(selectedMultiplicationTables.isEmpty)
-                }
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
@@ -78,6 +63,22 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Edutainment")
+            .safeAreaInset(edge: .bottom) {
+                Button {
+                    let questions = generateQuestions()
+                    
+                    path.append(.game(questions))
+                } label: {
+                    Spacer()
+                    Text("Start")
+                        .font(.headline)
+                        .padding(10)
+                    Spacer()
+                }
+                .buttonStyle(.glassProminent)
+                .disabled(selectedMultiplicationTables.isEmpty)
+                .padding()
+            }
         }
     }
     
