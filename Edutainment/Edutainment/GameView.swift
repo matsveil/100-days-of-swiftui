@@ -14,10 +14,13 @@ struct GameView: View {
     @State private var score: Int = 0
     @State private var currentQuestion: Int = 0
     @State private var answer: String = ""
+    @State private var correctAnswer: Bool = false
+    @State private var wrongAnswer: Bool = false
+    @State private var gameOver: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("What is \(questions[currentQuestion].multiplicand) times \(questions[currentQuestion].multiplier)?")
+            Text("\(currentQuestion + 1)/\(questions.count): What is \(questions[currentQuestion].multiplicand) times \(questions[currentQuestion].multiplier)?")
                 .font(.title).bold()
                 .foregroundStyle(.primary)
             
@@ -31,16 +34,31 @@ struct GameView: View {
                 .keyboardType(.numberPad)
                 
                 Button("Check") {
-                    self.nextQuestion()
+                    isCorrectAnswer()
                 }
                 .buttonStyle(.glassProminent)
                 .font(.headline)
-                .disabled(answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .disabled(Int(answer.trimmingCharacters(in: .whitespacesAndNewlines)) == nil)
             }
             
             
         }
         .padding(25)
+        .alert("Correct answer", isPresented: $correctAnswer) {
+            Button("Continue", action: nextQuestion)
+        } message: {
+            Text("Nice")
+        }
+        .alert("Wrong answer", isPresented: $wrongAnswer) {
+            Button("Continue", action: nextQuestion)
+        } message: {
+            Text("Oops")
+        }
+        .alert("Game over", isPresented: $gameOver) {
+            Button("Go home", action: quit)
+        } message: {
+            Text("Your final score was \(score).")
+        }
     }
     
     private func nextQuestion() {
@@ -49,7 +67,18 @@ struct GameView: View {
         if currentQuestion < questions.count - 1 {
             currentQuestion += 1
         } else {
-            quit()
+            gameOver.toggle()
+        }
+    }
+    
+    private func isCorrectAnswer() {
+        let isCorrect = Int(answer.trimmingCharacters(in: .whitespacesAndNewlines)) == questions[currentQuestion].correctAnswer
+        
+        if isCorrect {
+            correctAnswer.toggle()
+            score += 1
+        } else {
+            wrongAnswer.toggle()
         }
     }
 }
